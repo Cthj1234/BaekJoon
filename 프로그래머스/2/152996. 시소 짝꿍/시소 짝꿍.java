@@ -19,7 +19,7 @@ class Solution {
                     count++;
                 }else if(tmp * 2 == weights[i] * 3){
                     count ++;
-                }else if(tmp % weights[i] == 0) count++;
+                }else if(tmp == weights[i] || tmp == 2 * weights[i]) count++;
             }
             answer += count;
             pre_Value = count;
