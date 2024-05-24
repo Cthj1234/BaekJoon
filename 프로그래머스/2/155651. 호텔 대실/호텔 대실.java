@@ -1,13 +1,26 @@
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.PriorityQueue;
+import java.util.ArrayList;
+import java.util.Collections;
 
-class Solution{
+class Hotel implements Comparable<Hotel>{
 
+    public int start, end;
+
+    public Hotel(int start, int end) {
+        this.start = start;
+        this.end = end;
+    }
+
+    @Override
+    public int compareTo(Hotel o) {
+        if(this.end == o. end) return this.start - o.start;
+        return this.end - o.end;
+    }
+}
+
+class Solution {
     public int solution(String[][] book_time) {
-        int[][] timeList = new int[book_time.length][2];
-        int idx = 0;
-
+        int answer = 0;
+        ArrayList<Hotel> list = new ArrayList<>();
         for (String[] time : book_time) {
             int start = Integer.parseInt(time[0].replace(":", ""));
             int end = Integer.parseInt(time[1].replace(":", ""));
@@ -16,35 +29,21 @@ class Solution{
                 end = end + 50;
             } else end = end + 10;
 
-            timeList[idx][0] = start;
-            timeList[idx++][1] = end;
-
+            list.add(new Hotel(start, end));
         }
-        Arrays.sort(timeList, new Comparator<int[]>() {
-            @Override
-            public int compare(int[] o1, int[] o2) {
-                if(o1[0] == o2[0]) return o1[1] - o2[1];
-                return o1[0] - o2[0];
+        Collections.sort(list);
+
+        int size = list.size();
+        for (int i = 0; i < size; i++) {
+            int count = 1;
+            int end = list.get(i).end;
+            for (int j = i + 1; j < size; j++) {
+                int start = list.get(j).start;
+                if(start < end) count++;
             }
-        });
-
-        PriorityQueue<Integer> pq = new PriorityQueue<>();
-
-        for (int[] x : timeList) {
-            if(pq.isEmpty()){
-                pq.add(x[1]);
-                continue;
-            }
-
-            if (x[0] >= pq.peek()) {
-                pq.poll();
-                pq.add(x[1]);
-            }else{
-                pq.add(x[1]);
-            }
-
-
+            answer = Math.max(answer, count);
         }
-        return pq.size();
+
+        return answer;
     }
 }
