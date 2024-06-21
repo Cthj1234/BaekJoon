@@ -13,6 +13,8 @@ class Solution {
             }
         });
         
+        
+        
         for(int[] route : routes){
             if(cur < route[0]){
                 cur = route[1];
